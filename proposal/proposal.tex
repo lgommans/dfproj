@@ -1,26 +1,50 @@
-\documentclass{article}
+\documentclass[conference]{IEEEtran}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
+\usepackage{wrapfig}
+\usepackage{booktabs}
+\hypersetup{
+	colorlinks=true,       % false: boxed links; true: colored links
+	linkcolor=blue,        % color of internal links
+	citecolor=blue,        % color of links to bibliography
+	filecolor=magenta,     % color of file links
+	urlcolor=blue         
+}
 
-\usepackage[]{float}
-\usepackage[utf8]{inputenc}
-\usepackage[]{hyperref}
-\usepackage[hyperref=true,
-    natbib=true,
+%package list
+\usepackage[
+    backend=bibtex,
     style=numeric,
-    backend=bibtex]{biblatex}
+    sorting=none,
+    maxcitenames=2
+]{biblatex}
+
+
+%\addbibresource{main.bib}
 \bibliography{references.bib}
 
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{\baselineskip}
-
-\title{Using {\it imo.im} in forensic investigations \\
-	\vspace{0.3cm}
-	{\large CCF Project Proposal}
-}
-\date{November 16, 2017}
-\author{Robin Klusman, Luc Gommans}
 
 \begin{document}
+
+\title{Using {\it imo.im} in Forensic Investigations \\\vspace{5mm} \large  \today}
+\author{
+\IEEEauthorblockN{Robin Klusman}
+\IEEEauthorblockA{
+Security and Network Engineering \\ 
+University of Amsterdam \\
+robin.klusman@os3.nl}
+\and
+\IEEEauthorblockN{Luc Gommans}
+\IEEEauthorblockA{
+Security and Network Engineering \\ 
+University of Amsterdam \\
+os3-ccf@lucgommans.nl}
+}
 \maketitle
+\thispagestyle{plain}
+\pagestyle{plain}
+
 
 \section{Introduction}
 
@@ -39,12 +63,13 @@ false ones into question.
 Our main research question is:
 {\it What information can be gathered from the `imo' messenger app for Android?}
 
-This main research question divides in five sub-questions:
+This main research question divides in four sub-questions:
 
 \begin{enumerate}
-	\item Message data
-	\item Location data
-	\item Cached files/images
+    \item What data is identifiably sent over the network?
+    \item What message data is available locally?
+    \item What location data is available locally?
+    \item Do any cached files or images exist locally?
 \end{enumerate}
 
 
@@ -67,15 +92,18 @@ disk image.
 
 \section{Planning}
 
-\begin{tabular}[H]{ | l | p{10.2cm} | }
-	\hline
-	\textbf{Week} & \textbf{Activity} \\
-	\hline 1 & todo \\
-	\hline 2 & todo \\
-	\hline 3 & todo \\
-	\hline 4 & todo \\
-	\hline 5 & Finailze report and prepare presentation \\
-	\hline
+\begin{tabular}[H]{ l p{6cm} }
+	\toprule
+	\textbf{Wk} & \textbf{Activity} \\
+	\midrule
+	1 & Preliminary research and project proposal\\
+	2 & Setup test environment\\
+	3 & Decompile and analyse app\\
+	4 & Gather results\\
+	5 & Finailze report and prepare presentation \\
+	\bottomrule
+	
+	
 \end{tabular}
 
 
