@@ -25,7 +25,7 @@ In recent years, mobile communication tools have gained massively in
 popularity. Some of these applications have more hundreds of millions of
 downloads. This is important for forensics purposes because there are
 reasonable odds that a suspect has installed and possibly used one such
-application. For example, {\it imo.im} has around half a billion installs and
+application. For example, {\it imo.im} has over half a billion installs and
 requests location permissions: if this application logs one's location, this
 could be helpful for an investigation to either confirm alibies or to call
 false ones into question.
@@ -34,25 +34,28 @@ false ones into question.
 \section{Research Questions}
 
 Our main research question is:
-{\it todo}
+{\it What locally stored information can be gathered from the Android imo messenger app?}
 
 \vspace{0.5cm}
 
 This main research question divides in five sub-questions:
 
 \begin{enumerate}
-	\item todo 
+	\item Message data
+	\item Location data
+	\item Cached files/images
 \end{enumerate}
 
 
 \section{Methods and Scope}
 
-We will do both static and dynamic analysis of the application. The scope will
-be limited to the Android application. We will look at the stable release, not
-any (potentially volatile) beta releases.
+We will do both static and dynamic analysis of the application. We limit
+ourselves to the investigation of the imo Android application and do not look
+into the iOS, MacOS or Windows versions. We will look at the stable release,
+not any (potentially volatile) beta releases.
 
-The main interest is the network traffic and stored data. If network data is
-not (correctly) encrypted or otherwise revealing, this could be useful in an
+The main point of interest is network traffic and stored data. If network data
+is not (correctly) encrypted or otherwise revealing, this could be useful in an
 active investigation. Stored data is useful for analysis after confiscating a
 device.
 
