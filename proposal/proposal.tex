@@ -45,14 +45,20 @@ This main research question divides in five sub-questions:
 \end{enumerate}
 
 
-\section{Scope}
+\section{Methods and Scope}
 
-todo
+We will do both static and dynamic analysis of the application. The scope will
+be limited to the Android application. We will look at the stable release, not
+any (potentially volatile) beta releases.
 
+The main interest is the network traffic and stored data. If network data is
+not (correctly) encrypted or otherwise revealing, this could be useful in an
+active investigation. Stored data is useful for analysis after confiscating a
+device.
 
-\section{Methods}
-
-
+To access both the image and network traffic, we will run the application in an
+Android emulator. This allows the host to capture traffic, as well as mount the
+disk image.
 
 
 \section{Planning}
