@@ -43,3 +43,8 @@ check:
 	@echo
 	pdfgrep -n --color=always \\[[^0-9] $(texfile).pdf || :
 
+commit:
+	git add $(texfile).tex $(bibfile)
+	git commit
+	git push
+
