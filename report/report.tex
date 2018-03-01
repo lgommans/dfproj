@@ -49,13 +49,16 @@ os3-ccf@lucgommans.nl}
 \section{Introduction}
 
 In recent years, mobile communication tools have gained massively in popularity.
-Many people nowadays use internet based third party messaging applications over
-the small message service (SMS) provided by telecom companies.  Many such
-applications have over hundreds of millions of downloads, making them reasonably
-widespread. This fact is important for forensics purposes because there are
+Many mobile device users nowadays use internet based third party messaging
+applications over the small message service (SMS) provided by telecom companies.
+The advantage of these internet based alternatives is often the more extensive
+features an lower cost compared to SMS. It is therefore unsurprising that many
+such applications have over hundreds of millions of downloads, making the use of
+them widespread. This fact is important for forensics purposes because there are
 reasonable odds that a suspect has installed and possibly used at least one such
-application. The investigation into what data useful in a forensic investigation
-can be gathered from such applications, therefore becomes very relevant.
+application to send or receive sensitive data relevant to the case. The
+investigation into what data useful in a forensic investigation can be gathered
+from such applications, therefore becomes very relevant.
 
 One example of such an application is {\it imo.im}, which currently  has over
 half a billion installs. Additionally, this application requests permission to
@@ -97,13 +100,38 @@ privacy of any real imo users.
 
 No prior work has been done on the imo messaging app for any platform, the only
 mention of imo in academic literature is in the paper by \citeauthor{zhu}, which
-does a more general review of several group messaging applications \cite{zhu}.
+does a more general review of several group messaging applications and does not
+conduct an analysis of what data can be acquired for use in a criminal
+investigation \cite{zhu}.
 
 Fortunately academic research does exist on the forensic investigation of other
 messaging applications. \citeauthor{mahajan2013forensic} conduct a forensic
 analysis of the Android messaging applications Viber and Whatsapp
-\cite{mahajan2013forensic}. %TODO
+\cite{mahajan2013forensic}. The aim of their paper is to find whether the data
+of those applications, such as sent and received messages and images, are stored
+locally in a way that they can be extracted from the device.
+\citeauthor{mahajan2013forensic} managed to find and extract several artifacts
+relevant to a forensic investigation, such as sent and received messages and
+contact phone numbers.
 
+\citeauthor{walnycky2015network} conduct an extensive investigation of 20
+popular Android messaging applications \cite{walnycky2015network}. In their
+paper they investigate what data is acquirable from the mobile device's local
+storage in a forensic investigation for each of the 20 discussed applications.
+
+
+
+
+
+\section{Method}\label{sec:V}
+
+%todo investigate deleted messages, appear in database?
+%todo investigate logout etc
+%todo we do not focus on the proper forensic extraction methods but rather on
+%the data that is available after such extraction has taken place
+%todo add more phone numbers, can we see only phones from contact database or
+%also users added manually on imo not in the phone's contacts.
+%todo can we see own user telephone number/username
 
 % \section{Methods and Scope}
 %
