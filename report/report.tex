@@ -105,6 +105,26 @@ analysis of the Android messaging applications Viber and Whatsapp
 \cite{mahajan2013forensic}. %TODO
 
 
+\section{Network Communication}\label{sec:comm}
+
+Most network communication was observed to use TCP ports 443, 5223 and 5228. We
+have not been able to identify why the app sometimes uses one over the other.
+In the APK, we find references to those three ports together, so we are
+confident that there are no other TCP ports in use. Searching online for those
+ports, we find that these ports are a subset of what WhatsApp uses for
+communication (80, 443, 5222, 5223, 5228 and 5242 are mentioned most
+frequently), as well as C2DM (now-defunct server-push platform provided by
+Google, using port 5228) and Apple's push implementation (APNS, using port
+5223). Most likely, imo tries those ports because they are commonly used by
+mobile devices for core operating system features (server push) or other
+popular applications.
+
+UDP seems to be used for video calls. Voice calls are done using TCP, using one
+of the aforementionde ports.
+
+The downloading of stickers is done over TCP port 80 (plain HTTP).
+
+
 % \section{Methods and Scope}
 %
 % We will do both static and dynamic analysis of the application. We limit
