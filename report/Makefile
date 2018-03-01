@@ -14,7 +14,7 @@ o: open
 
 deps:
 	# There might be more dependencies, but these were the ones I did not have installed by default
-	sudo apt install texlive-bibtex-extra pdfgrep
+	sudo apt install texlive-bibtex-extra pdfgrep texlive-publishers
 	sudo apt-get install --no-install-recommends texlive-latex-extra
 
 clean:
@@ -47,4 +47,7 @@ commit:
 	git add $(texfile).tex $(bibfile)
 	git commit
 	git push
+
+hub:
+	sensible-browser "https://github.com/`grep '.git$$' ../.git/config | awk -F: '{print $$2}' | awk -F. '{print $$1}'`"
 
