@@ -139,18 +139,42 @@ Most network communication was observed to use TCP ports 443, 5223 and 5228. We
 have not been able to identify why the app sometimes uses one over the other.
 In the APK, we find references to those three ports together, so we are
 confident that there are no other TCP ports in use. Searching online for those
-ports, we find that these ports are a subset of what WhatsApp uses for
-communication (80, 443, 5222, 5223, 5228 and 5242 are mentioned most
-frequently), as well as C2DM (now-defunct server-push platform provided by
-Google, using port 5228) and Apple's push implementation (APNS, using port
-5223). Most likely, imo tries those ports because they are commonly used by
-mobile devices for core operating system features (server push) or other
-popular applications.
+ports, we find that these ports overlap with WhatsApp, C2DM (now-defunct
+server-push platform provided by Google, using port 5228) and Apple's push
+implementation (APNS, using port 5223). Most likely, imo uses those ports
+because they are commonly used by mobile devices for core operating system
+features (server push) or other popular applications. Network administrators
+are unlikely to block those ports.
 
-UDP seems to be used for video calls. Voice calls are done using TCP, using one
-of the aforementionde ports.
+UDP port 443 is used for video calls. In contrast, voice-only calls are done
+using TCP, using one of the aforementionde ports.
 
-The downloading of stickers is done over TCP port 80 (plain HTTP).
+The downloading of stickers is done over TCP port 80 (plain HTTP). Stickers in
+imo are large, animated emoticons. Anyone observing the network traffic can
+therefore see which emoticons are used by a device. It is not visible, however,
+which chat a sticker was used in. %TODO: downloaded only once?
+
+\subsection{Communication format}
+
+The stickers are downloaded over TCP port 80, using HTTP/1.1. A sticker is a
+zip archive with one image, in png format, per frame of the animation. The
+filenames are sequential numbers: \texttt{1.png}, \texttt{2.png}, etc.
+
+When the app chooses to use port 443 for the bulk of the communication, then
+the connection is secured using TLSv1.2. The client offers 20 cipher suites,
+among which obsolete ciphers such as \texttt{TLS\_RSA\_WITH\_RC4\_128\_SHA} and
+\texttt{TLS\_RSA\_WITH\_AES\_128\_CBC\_SHA}, though this is probably dependent
+on the operating system. In our case, the server picked
+\texttt{TLS\_RSA\_WITH\_AES\_128\_GCM\_SHA256}, which is labeled by Mozilla as
+a ciphersuite of intermediate strength\cite{moz-tls}.
+
+When the app choses to use one of the two alternative TCP ports (5223 or 5228),
+the connection is encoded using an unknown method. The data is binary and could
+be compressed, encrypted or both. When sending multiple kilobytes of repeating
+characters, the observed traffic is much smaller, leading us to believe the
+data is compressed. It is unknown whether the traffic is also encrypted.
+
+We have not been able to identify the protocol used for UDP traffic.
 
 
 % \section{Methods and Scope}
