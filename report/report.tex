@@ -137,7 +137,7 @@ local/server storage.
 %also users added manually on imo not in the phone's contacts.
 %todo can we see own user telephone number/username
 
-\section{Network Communication}\label{sec:comm}
+\section{Network Communication Analysis}\label{sec:comm}
 
 Most network communication was observed to use TCP ports 443, 5223 and 5228. We
 have not been able to identify why the app sometimes uses one over the other.
@@ -162,7 +162,8 @@ which chat a sticker was used in. %TODO: downloaded only once?
 
 The stickers are downloaded over TCP port 80, using HTTP/1.1. A sticker is a
 zip archive with one image, in png format, per frame of the animation. The
-filenames are sequential numbers: \texttt{1.png}, \texttt{2.png}, etc.
+filenames are sequential numbers: \texttt{1.png}, \texttt{2.png}, etc. TODO
+sticker previews are just single png images over http
 
 When the app chooses to use port 443 for the bulk of the communication, then
 the connection is secured using TLSv1.2. The client offers 20 cipher suites,
@@ -179,6 +180,37 @@ characters, the observed traffic is much smaller, leading us to believe the
 data is compressed. It is unknown whether the traffic is also encrypted.
 
 We have not been able to identify the protocol used for UDP traffic.
+
+
+TODO p2p?
+
+
+\section{Local Storage Analysis}
+
+We extracted the app's data folder from the Android device using TODO. Imo also
+stores data in \texttt{/sdcard/DCIM/imo} and \texttt{/sdcard/IMO}. Here, only
+videos and pictures are stored which are used in conversations or stories.
+
+In the data directory, we can find all our messages and contacts in the sqlite3
+file \texttt{databases/imofriends.db}. Data is stored in separate files, for
+example TODO BLAH
+
+RANDOM NOTE
+===========
+
+- imofriends.db / table call_timestamps / time is in unix format, UTC timezone, in nanoseconds, of start of call
+
+- deleted messages are really deleted from the local database, but still exist in the binary data of the sqlite3 database
+
+- call_timestamps not deleted upon account removal (in contrast with messages, friends, stories, etc.)
+
+- after account deletion, the database is not removed but only cleared (mostly...). Much of the data is still available in the binary.
+
+- files/bprefs.json contains phone number of logged in user in the field GET_MY_PROFILE (in the subfield `phone`), as well as LAST_APP_OPEN_TS (that's just what it says)
+
+- in files/VerificationPrefs.json, the phone number of the user can be found in the field PHONE icm PHONE_CC. This is also present if the number has not yet been confirmed.
+
+- in files/bprefs.json, the SIGNUP_DATE appears to be the first time someone logged in with this phone number; SIGNUP_TIME is when you last logged in on this device with this number
 
 
 % \section{Methods and Scope}
