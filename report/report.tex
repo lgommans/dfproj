@@ -118,13 +118,25 @@ contact phone numbers.
 popular Android messaging applications \cite{walnycky2015network}. In their
 paper they investigate what data is can be retrieved by investigating the mobile
 device's local storage, the applications' server storage and network traffic
-analysis in a forensic investigation for each application. They state that 4 of
-the applications leaked no data when subjected to their investigative methods.
-However, 16 applications did leak data either through network communication or
-local/server storage.
+analysis in a forensic investigation for each application. Network traffic is
+analysed using three different tools, Wireshark, NetworkMiner and NetWitness
+Investigator, for the purpose of cross referencing the results. Server stored
+data was investigated by recovering links to the applications' servers from the
+network traffic analysis. Locally stored data was acquired and investigated
+using Micro-systemation's {\it XRY} and verified by also using {\it Helium
+backup} in combination with {\it Android backup extractor} and an sqlite
+database browser.  In their paper, \citeauthor{walnycky2015network} state that 4
+of the applications leaked no data when subjected to their investigative
+methods.  However, their study did find that 16 applications do leak data either
+through network communication or local/server storage.
 
-
-
+A forensic investigation of WhatsApp is also conducted by
+\citeauthor{anglano2014forensic} \cite{anglano2014forensic}, who uses a virtual
+Android environment created with {\it YouWave} to investigate what data can be
+acquired from WhatsApp through a device's local storage. Their study shows that
+it is very feasible to acquire WhatsApp data from local storage, since data such
+as sent and received messages and contact information is stored unencrypted on
+the local storage.
 
 
 \section{Method}\label{sec:method}
