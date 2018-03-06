@@ -60,18 +60,48 @@ application to send or receive sensitive data relevant to the case. The
 investigation into what data useful in a forensic investigation can be gathered
 from such applications, therefore becomes very relevant.
 
-One example of such an application is {\it imo.im}, which currently  has over
-half a billion installs. Additionally, this application requests permission to
-track the user's location, making it even more interesting for forensic
-purposes. If the application indeed tracks and stores a log of a user's location
-data, such data could be valuable in court to for instance validate or
-invalidate a suspect's alibi.
+One example of such an application is {\it imo.im}, which currently has over
+half a billion installs on the Google Play Store. Fewer than ten messaging
+applications have over half a billion installs as of October
+2017\cite{wiki-gplay-popular}. It appears most popular in southern Asia and the
+middle east, though there are users worldwide\footnotemark. This application
+requests permission to track the user's location, making it even more
+interesting for forensic purposes. If the application indeed tracks and stores
+a log of a user's location data, such data could be valuable in court to for
+instance validate or invalidate a suspect's alibi.
 
-The remainder of this paper is structured as follows: Section
-\ref{sec:researchq} describes our main research question and the defined
-sub-questions. In Section \ref{sec:ethics} we discuss the ethical implications
-of our work. Section \ref{sec:relwork} gives an overview of the prior work done
-in this area of research. %TODO
+The remainder of this paper is structured as follows: the next section briefly
+introduces the features of imo. Section \ref{sec:researchq} describes our main
+research question and the defined sub-questions. In Section \ref{sec:ethics} we
+discuss the ethical implications of our work. Section \ref{sec:relwork} gives
+an overview of the prior work done in this area of research. %TODO
+
+% Or do we want to cite this instead?
+\footnotetext{Via Google Trends: \url{https://trends.google.com/trends/explore?q=imo}}
+
+
+\section{Overview of imo}
+
+Creating an account on imo is the same procedure as logging into your account
+on a new device: you enter your phone number and enter the confirmation sms
+code. There are no other types of accounts possible, e.g. no username and
+password login.
+
+Contacts in imo are added through your Android phone book. You can send those
+contacts text messages, or place (video) calls. You can also share a `story',
+which is a graphical message shared with all your contacts. It can consist of a
+picture, short video, drawing, etc. Contacts can view your stories and send a
+response. These responses appear in the chat history as a reply, referencing
+your story.
+
+When chatting, the message you are typing is immediately visible to the other
+party, before even sending it. This feature is called `Real time chat'. Sending
+a message makes it final: it cannot be edited afterwards, and one can only
+delete it locally.
+
+Imo also supports group chats and group calls. Compared to regular chats, we
+did not find these to have any special features.
+
 
 \section{Research Questions}\label{sec:researchq}
 
@@ -149,26 +179,44 @@ the local storage.
 %also users added manually on imo not in the phone's contacts.
 %todo can we see own user telephone number/username
 
+
+
 \section{Network Communication Analysis}\label{sec:comm}
 
-Most network communication was observed to use TCP ports 443, 5223 and 5228. We
-have not been able to identify why the app sometimes uses one over the other.
-In the APK, we find references to those three ports together, so we are
-confident that there are no other TCP ports in use. Searching online for those
-ports, we find that these ports overlap with WhatsApp, C2DM (now-defunct
-server-push platform provided by Google, using port 5228) and Apple's push
-implementation (APNS, using port 5223). Most likely, imo uses those ports
-because they are commonly used by mobile devices for core operating system
-features (server push) or other popular applications. Network administrators
-are unlikely to block those ports.
-
-UDP port 443 is used for video calls. In contrast, voice-only calls are done
-using TCP, using one of the aforementioned ports.
+The regular network communication (e.g. chats) was observed to use TCP ports
+443, 5223 and 5228. We have not been able to identify why the app sometimes
+uses one port over the other. In the APK, we find references to those three
+ports together, so we are confident that there are no other TCP ports in use.
+Searching online for those ports, we find that these ports overlap with
+WhatsApp, C2DM (now-defunct server-push platform provided by Google, using port
+5228) and Apple's push implementation (APNS, using port 5223). Most likely, imo
+uses those ports because they are commonly used by mobile devices for core
+operating system features (server push) or other popular applications. Network
+administrators are unlikely to block those ports.
 
 The downloading of stickers is done over TCP port 80 (plain HTTP). Stickers in
 imo are large, animated emoticons. Anyone observing the network traffic can
 therefore see which emoticons are used by a device. It is not visible, however,
 which chat a sticker was used in. %TODO: downloaded only once?
+
+UDP is used for voice and video calls, using various ports. The choice of UDP
+port seems random for the server, though we have also twice observed the server
+to use UDP port 443 which seems too specific to be a coincidence, particularly
+because it happened twice. The lowest port observed, other than 443, is 29 879.
+Possibly a port is picked above a certain number to avoid conflicts with
+existing services.
+
+The Android client also appears to choose ports at random, though the lowest we
+have observed was 33 419. We theorize that a random port is chosen above 32 000
+to avoid using another application's port.
+
+The clients involved in a call will try to reach each other directly for voice
+and video calls. The communication goes through imo's servers by default, but
+the app keeps trying to communicate peer to peer throughout the whole session
+(it sends a packet twice per second). If this succeeds, it will switch to peer
+to peer communication. Calls continue to work if the internet connection is
+disrupted, but the users are on the same LAN.
+
 
 \subsection{Communication format}
 
@@ -177,9 +225,9 @@ zip archive with one image, in png format, per frame of the animation. The
 filenames are sequential numbers: \texttt{1.png}, \texttt{2.png}, etc. TODO
 sticker previews are just single png images over http
 
-When the app chooses to use port 443 for the bulk of the communication, then
-the connection is secured using TLSv1.2. The client offers 20 cipher suites,
-among which obsolete ciphers such as \texttt{TLS\_RSA\_WITH\_RC4\_128\_SHA} and
+When the app chooses to use port 443, the connection is secured using TLSv1.2.
+The client offers 20 cipher suites, among which obsolete ciphers such as
+\texttt{TLS\_RSA\_WITH\_RC4\_128\_SHA} and
 \texttt{TLS\_RSA\_WITH\_AES\_128\_CBC\_SHA}, though this is probably dependent
 on the operating system. In our case, the server picked
 \texttt{TLS\_RSA\_WITH\_AES\_128\_GCM\_SHA256}, which is labeled by Mozilla as
@@ -191,39 +239,78 @@ be compressed, encrypted or both. When sending multiple kilobytes of repeating
 characters, the observed traffic is much smaller, leading us to believe the
 data is compressed. It is unknown whether the traffic is also encrypted.
 
-We have not been able to identify the protocol used for UDP traffic.
-
-
-TODO p2p?
+We have not been able to identify the protocol used for UDP traffic. For the
+traffic which is sent over port 443, we tried to decode it using Wireshark as
+DTLS and QUIC traffic, but neither was successful. The traffic also does not
+contain any strings, such as the common name or issuer name from a certificate,
+which should have been visible for normal TLS or QUIC traffic.
 
 
 \section{Local Storage Analysis}
 
 We extracted the app's data folder from the Android device using TODO. Imo also
-stores data in \texttt{/sdcard/DCIM/imo} and \texttt{/sdcard/IMO}. Here, only
-videos and pictures are stored which are used in conversations or stories.
+stores data in \texttt{/sdcard/DCIM/imo} and \texttt{/sdcard/IMO}. In those
+folders, only videos and pictures are stored which are used in conversations or
+stories.
 
 In the data directory, we can find all our messages and contacts in the sqlite3
-file \texttt{databases/imofriends.db}. Data is stored in separate files, for
-example TODO BLAH
+file \texttt{databases/imofriends.db}. All contacts have a \texttt{buid}, which
+is numeric. Group chats have a non-numeric \texttt{buid}.
 
-RANDOM NOTE
-===========
+The table `messages' contains all messages, including whether a message was
+delivered to the recipient's device and whether a message was read (the columns
+\texttt{message\_state} and \texttt{message\_read} are set to `1' when
+delivered and read, respectively).
 
-- imofriends.db / table call_timestamps / time is in unix format, UTC timezone, in nanoseconds, of start of call
+The table `call\_timestamps' contains a convenient log of all calls placed
+through the imo application. Only the start time is noted, together with the
+contact which was called, not the end time or duration. This timestamp is in
+unix format, in nanoseconds, in the UTC timezone. Missed calls are placed in
+the `messages' table, as a chat message to the respective user.
 
-- deleted messages are really deleted from the local database, but still exist in the binary data of the sqlite3 database
+The table `friends' contains your contacts. These are all the people you can
+message and call. In contrast, the tables `imo\_phonebook', `phone\_numbers',
+and `phonebook\_entries' contain the contacts of whom you have a number; these
+contacts are the ones also in your Android contact list. It appears that you
+are only able to see stories of the users of whom you have the number.
 
-- call_timestamps not deleted upon account removal (in contrast with messages, friends, stories, etc.)
 
-- after account deletion, the database is not removed but only cleared (mostly...). Much of the data is still available in the binary.
+\subsection{Removing data}
 
-- files/bprefs.json contains phone number of logged in user in the field GET_MY_PROFILE (in the subfield `phone`), as well as LAST_APP_OPEN_TS (that's just what it says)
+When you delete a message from a chat in imo, the application deletes it from
+the local database's `messages' table. Similarly, when you delete one of your
+stories, it is truly deleted from the `stories' table. However, in the binary
+data, we can still find the original message. By parsing the sqlite format, one
+might be able to find other fields belonging to the message such as the
+corresponding timestamp.
 
-- in files/VerificationPrefs.json, the phone number of the user can be found in the field PHONE icm PHONE_CC. This is also present if the number has not yet been confirmed.
+When removing a story, references to the story are not deleted. For example
+when one replies to a story, an entry is created in the `messages' table which
+refers to it by its object id. These rows are not deleted upon deletion of the
+original story. When attempting to view the story in the application, it shows
+the story as deleted.
 
-- in files/bprefs.json, the SIGNUP_DATE appears to be the first time someone logged in with this phone number; SIGNUP_TIME is when you last logged in on this device with this number
+When removing your account on imo, most of the local database tables are
+cleared. The `call\_timestamps' table is, however, not cleared and still
+contains all previous calls made on this device. Other tables, such as
+`messages' and `friends', are cleared. Like with deleted messages, however, the
+original data can still be found in the binary data of the sqlite file.
 
+
+RANDOM NOTES
+============
+
+- files/bprefs.json contains phone number of logged in user in the field GET\_MY\_PROFILE (in the subfield `phone`), as well as LAST\_APP\_OPEN\_TS (that's just what it says)
+
+- in files/VerificationPrefs.json, the phone number of the user can be found in the field PHONE icm PHONE\_CC. This is also present if the number has not yet been confirmed.
+
+- in files/bprefs.json, the SIGNUP\_DATE appears to be the first time someone logged in with this phone number; SIGNUP\_TIME is when you last logged in on this device with this number
+
+- TODO: what about deleted stories?
+
+- One can log in multiple times with the same account from multiple devices, concurrently
+
+- TODO: any sort of cache of Real-time-chat? People might chat through that and thereby never log any messages.
 
 % \section{Methods and Scope}
 %
