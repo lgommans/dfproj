@@ -274,6 +274,23 @@ and `phonebook\_entries' contain the contacts of whom you have a number; these
 contacts are the ones also in your Android contact list. It appears that you
 are only able to see stories of the users of whom you have the number.
 
+Outside of this database, other files also contain usage information. The JSON
+file \texttt{files/brefs.json} contains a field named
+\texttt{LAST\_APP\_OPEN\_TS}, which contains a timestamp of when the app was
+last opened.
+
+
+\subsection{Logged in user}
+
+When signing up or logging in, one needs to enter a confirmation code sent by
+SMS. The phone number entered is stored in
+\texttt{files/VerificationPrefs.json}, even when the number is not yet
+confirmed. After confirming the number, it is stored in
+\texttt{files/bprefs.json}.
+
+The JSON file contains a field named \texttt{GET\_MY\_PROFILE}, which is
+another JSON string with a field named \texttt{phone}.
+
 
 \subsection{Removing data}
 
@@ -300,13 +317,7 @@ original data can still be found in the binary data of the sqlite file.
 RANDOM NOTES
 ============
 
-- files/bprefs.json contains phone number of logged in user in the field GET\_MY\_PROFILE (in the subfield `phone`), as well as LAST\_APP\_OPEN\_TS (that's just what it says)
-
-- in files/VerificationPrefs.json, the phone number of the user can be found in the field PHONE icm PHONE\_CC. This is also present if the number has not yet been confirmed.
-
 - in files/bprefs.json, the SIGNUP\_DATE appears to be the first time someone logged in with this phone number; SIGNUP\_TIME is when you last logged in on this device with this number
-
-- TODO: what about deleted stories?
 
 - One can log in multiple times with the same account from multiple devices, concurrently
 
