@@ -102,6 +102,9 @@ delete it locally.
 Imo also supports group chats and group calls. Compared to regular chats, we
 did not find these to have any special features.
 
+Finally, imo supports what are called `stickers': large, animated emoticons. 
+These are placed in a chat as a message by themselves.
+
 
 \section{Research Questions}\label{sec:researchq}
 
@@ -194,10 +197,10 @@ uses those ports because they are commonly used by mobile devices for core
 operating system features (server push) or other popular applications. Network
 administrators are unlikely to block those ports.
 
-The downloading of stickers is done over TCP port 80 (plain HTTP). Stickers in
-imo are large, animated emoticons. Anyone observing the network traffic can
-therefore see which emoticons are used by a device. It is not visible, however,
-which chat a sticker was used in. %TODO: downloaded only once?
+The downloading of stickers is done over plain HTTP. Anyone observing the
+network traffic can therefore see which emoticons are used by a device. It is
+not visible, however, which chat a sticker was used in.
+%TODO: ^downloaded only once?
 
 UDP is used for voice and video calls, using various ports. The choice of UDP
 port seems random for the server, though we have also twice observed the server
@@ -222,8 +225,9 @@ disrupted, but the users are on the same LAN.
 
 The stickers are downloaded over TCP port 80, using HTTP/1.1. A sticker is a
 zip archive with one image, in png format, per frame of the animation. The
-filenames are sequential numbers: \texttt{1.png}, \texttt{2.png}, etc. TODO
-sticker previews are just single png images over http
+filenames are sequential numbers: \texttt{1.png}, \texttt{2.png}, etc. When the
+user is picking a sticker, the previews are downloaded as a single image over
+HTTP (rather than the full animation in a zip archive).
 
 When the app chooses to use port 443, the connection is secured using TLSv1.2.
 The client offers 20 cipher suites, among which obsolete ciphers such as
@@ -285,11 +289,16 @@ last opened.
 When signing up or logging in, one needs to enter a confirmation code sent by
 SMS. The phone number entered is stored in
 \texttt{files/VerificationPrefs.json}, even when the number is not yet
-confirmed. After confirming the number, it is stored in
-\texttt{files/bprefs.json}.
+confirmed.
 
-The JSON file contains a field named \texttt{GET\_MY\_PROFILE}, which is
-another JSON string with a field named \texttt{phone}.
+After confirming the number, it is stored in \texttt{files/bprefs.json}. The
+JSON file contains a field named \texttt{GET\_MY\_PROFILE}, which is another
+JSON string containing a field named \texttt{phone}.
+
+This file also contains the fields \texttt{SIGNUP\_DATE} and
+\texttt{SIGNUP\_TIME}, which contain the first time someone logged in with this
+phone number and the last time you logged in on this device with this number,
+respectively.
 
 
 \subsection{Removing data}
@@ -316,8 +325,6 @@ original data can still be found in the binary data of the sqlite file.
 
 RANDOM NOTES
 ============
-
-- in files/bprefs.json, the SIGNUP\_DATE appears to be the first time someone logged in with this phone number; SIGNUP\_TIME is when you last logged in on this device with this number
 
 - One can log in multiple times with the same account from multiple devices, concurrently
 
