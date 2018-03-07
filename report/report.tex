@@ -102,7 +102,7 @@ delete it locally.
 Imo also supports group chats and group calls. Compared to regular chats, we
 did not find these to have any special features.
 
-Finally, imo supports what are called `stickers': large, animated emoticons. 
+Finally, imo supports what are called `stickers': large, animated emoticons.
 These are placed in a chat as a message by themselves.
 
 
@@ -174,13 +174,20 @@ the local storage.
 
 \section{Method}\label{sec:method}
 
-%todo investigate deleted messages, appear in database?
-%todo investigate logout etc
-%todo we do not focus on the proper forensic extraction methods but rather on
-%the data that is available after such extraction has taken place
-%todo add more phone numbers, can we see only phones from contact database or
-%also users added manually on imo not in the phone's contacts.
-%todo can we see own user telephone number/username
+To investigate what forensically interesting data can be obtained through imo,
+we first focus on analysing network traffic. For this analysis, we run a tcpdump
+locally on the phone which we investigate using wireshark afterwards.
+
+The investigation of the local storage is done by first imaging the entire local
+storage of the device and then mounting this image read only on our linux
+system.
+%todo
+
+
+\subsection{Experimental setup}\label{sec:setup}
+
+For our analysis of imo we used two android phones both running Android version
+6.0.1. %Todo imo version
 
 
 
@@ -258,8 +265,9 @@ folders, only videos and pictures are stored which are used in conversations or
 stories.
 
 In the data directory, we can find all our messages and contacts in the sqlite3
-file \texttt{databases/imofriends.db}. All contacts have a \texttt{buid}, which
-is numeric. Group chats have a non-numeric \texttt{buid}.
+file \texttt{databases/imofriends.db}. For all contacts, both their name and a
+numeric \texttt{buid} is stored. Group chats are also stored with their
+name/identifier but use a non-numeric \texttt{buid}.
 
 The table `messages' contains all messages, including whether a message was
 delivered to the recipient's device and whether a message was read (the columns
