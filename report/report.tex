@@ -176,7 +176,8 @@ the local storage.
 
 To investigate what forensically interesting data can be obtained through imo,
 we first focus on analysing network traffic. For this analysis, we run a tcpdump
-locally on the phone which we investigate using wireshark afterwards.
+locally on the phone, writing the data in pcap format to a file. We then download
+the data from the phone and inspect it using wireshark afterwards.
 
 The investigation of the local storage is done by first imaging the entire local
 storage of the device and then mounting this image read only on our linux
@@ -187,8 +188,10 @@ system.
 \subsection{Experimental setup}\label{sec:setup}
 
 For our analysis of imo we used two android phones both running Android version
-6.0.1. %Todo imo version
-
+6.0.1. The imo application has versionCode 0x709 and the versionName is
+`9.8.000000009731', according to the \texttt{AndroidManifest.xml} file inside
+the apk. The SHA-256 hash value of the apk file is \texttt{61972382 e73a4614
+0cae38a0 3eae8b63 9f6e42aa 9d47368d f207a08b a6f097ae}.
 
 
 \section{Network Communication Analysis}\label{sec:comm}
@@ -207,7 +210,7 @@ administrators are unlikely to block those ports.
 The downloading of stickers is done over plain HTTP. Anyone observing the
 network traffic can therefore see which emoticons are used by a device. It is
 not visible, however, which chat a sticker was used in.
-%TODO: ^downloaded only once?
+%TODO: ^downloaded only once? What about caching?
 
 UDP is used for voice and video calls, using various ports. The choice of UDP
 port seems random for the server, though we have also twice observed the server
@@ -355,7 +358,38 @@ RANDOM NOTES
 % disk image.
 
 
+\section{Discussion}
 
+% r/therewasanattempt -- I'm not quite sure if this is a good way to write the discussion section, but I tried something at least :-)
+
+Imo could encrypt the local storage, or it could keep private data only on the
+server and delete it from the local device. Instead, it makes no attempt at
+either: all data is locally accessible without any obfuscation or encryption.
+
+The databases are also not properly cleared upon deletion of the account: most
+tables are emptied, but the database is not recreated. This creates two
+problems: the application developers might forget to empty one of the tables
+(it appears the call history table has been forgotten) and it causes all data
+to be retained in the binary sqlite data file until overwritten. We would
+expect an application with private data (such as private chats) to completely
+re-create the database, or a truly privacy-conscious to securely wipe the
+database file before re-creation.
+
+This is not wholly unexpected: imo does not claim to be privacy-focused, and
+other apps should not be able to access the data folder, so it should be
+reasonably secure. Still, simple measures could have been taken to make it more
+secure.
+
+The accessibility of the data also makes it easy for users to alter their own
+data. One could make it appear as if someone else was logged into the device,
+or manually insert messages into the chat history.
+
+%TODO: finish the section
+
+
+\section{Conclusion}
+
+%TODO this
 
 
 \printbibliography
