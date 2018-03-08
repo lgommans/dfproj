@@ -78,14 +78,22 @@ an overview of the prior work done in this area of research. %TODO
 
 % Or do we want to cite this instead?
 \footnotetext{Via Google Trends: \url{https://trends.google.com/trends/explore?q=imo}}
+%TODO this is heavily influenced by the acronym imo, meaning in my opinion.
 
 
-\section{Overview of imo}
+\section{Overview of Imo}
 
-Creating an account on imo is the same procedure as logging into your account
-on a new device: you enter your phone number and enter the confirmation sms
-code. There are no other types of accounts possible, e.g. no username and
-password login.
+As stated previously, imo is a messaging and voice and video calling application
+developed for Android, Mac OS X, iOS and Windows \cite{imo}. This description
+focusses on the Android version of imo, as the version for other platforms were
+not used for this paper.
+
+Imo requires users to log in using their phone number, and each login is
+verified through an SMS code sent to that number. There is no difference between
+logging into an existing account (i.e. phone number known used previously for
+imo) and creating a new account (i.e. phone number not previously used for imo),
+as imo uses the same procedure for both. There are no other types of logins
+possible, e.g. there is no option to use a username and password to log in.
 
 Contacts in imo are added through your Android phone book. You can send those
 contacts text messages, or place (video) calls. You can also share a `story',
@@ -129,7 +137,7 @@ use only designated test devices to make sure we do not invade or compromise the
 privacy of any real imo users.
 
 
-\section{Related work}\label{sec:relwork}
+\section{Related Work}\label{sec:relwork}
 
 No prior work has been done on the imo messaging app for any platform, the only
 mention of imo in academic literature is in the paper by \citeauthor{zhu}, which
@@ -171,38 +179,39 @@ it is very feasible to acquire WhatsApp data from local storage, since data such
 as sent and received messages and contact information is stored unencrypted on
 the local storage.
 
+\subsection{Experimental Setup}\label{sec:setup}
 
-\section{Method}\label{sec:method}
+For our analysis of imo we used two android phones, a Sony Xperia Z (C6603) and
+an Alcatel Pixi 4, both of which run Android version 6.0.1. We used imo
+version TODO for our testing. %todo
+
+
+\section{Methods}\label{sec:method}
 
 To investigate what forensically interesting data can be obtained through imo,
 we first focus on analysing network traffic. For this analysis, we run a tcpdump
-locally on the phone which we investigate using wireshark afterwards.
+locally on the phone which we investigate using Wireshark afterwards, the
+results of this are discussed in Section \ref{sec:network}.
 
 The investigation of the local storage is done by first imaging the entire local
 storage of the device and then mounting this image read only on our linux
-system.
-%todo
+system. Analysis of the image was done manually, as our focus lies mostly with
+what data can be gathered and not with acquisition tools. The results of this
+investigation are discussed in Section \ref{sec:storage}.
 
 
-\subsection{Experimental setup}\label{sec:setup}
+\section{Network Communication Analysis}\label{sec:network}
 
-For our analysis of imo we used two android phones both running Android version
-6.0.1. %Todo imo version
-
-
-
-\section{Network Communication Analysis}\label{sec:comm}
-
-The regular network communication (e.g. chats) was observed to use TCP ports
-443, 5223 and 5228. We have not been able to identify why the app sometimes
-uses one port over the other. In the APK, we find references to those three
-ports together, so we are confident that there are no other TCP ports in use.
-Searching online for those ports, we find that these ports overlap with
-WhatsApp, C2DM (now-defunct server-push platform provided by Google, using port
-5228) and Apple's push implementation (APNS, using port 5223). Most likely, imo
-uses those ports because they are commonly used by mobile devices for core
-operating system features (server push) or other popular applications. Network
-administrators are unlikely to block those ports.
+Upon analysing the tcpdump in Wireshark, we found that the regular network
+communication (e.g. chats) use TCP ports 443, 5223 and 5228. We have not been
+able to identify why the app sometimes uses one port over the other. In the APK,
+we find references to those three ports together, so we are confident that there
+are no other TCP ports in use.  Searching online for those ports, we find that
+these ports overlap with WhatsApp, C2DM (now-defunct server-push platform
+provided by Google, using port 5228) and Apple's push implementation (APNS,
+using port 5223). Most likely, imo uses those ports because they are commonly
+used by mobile devices for core operating system features (server push) or other
+popular applications. Network administrators are unlikely to block those ports.
 
 The downloading of stickers is done over plain HTTP. Anyone observing the
 network traffic can therefore see which emoticons are used by a device. It is
@@ -228,23 +237,23 @@ to peer communication. Calls continue to work if the internet connection is
 disrupted, but the users are on the same LAN.
 
 
-\subsection{Communication format}
+\subsection{Communication Format}
 
-The stickers are downloaded over TCP port 80, using HTTP/1.1. A sticker is a
-zip archive with one image, in png format, per frame of the animation. The
-filenames are sequential numbers: \texttt{1.png}, \texttt{2.png}, etc. When the
-user is picking a sticker, the previews are downloaded as a single image over
-HTTP (rather than the full animation in a zip archive).
+Any stickers used in chats are downloaded over TCP port 80, using HTTP/1.1. A
+sticker is a zip archive with one image, in png format, per frame of the
+animation. The filenames are sequential numbers: \texttt{1.png}, \texttt{2.png},
+etc. When the user is picking a sticker, the previews are downloaded as a single
+image over HTTP (rather than the full animation in a zip archive).
 
-When the app chooses to use port 443, the connection is secured using TLSv1.2.
-The client offers 20 cipher suites, among which obsolete ciphers such as
-\texttt{TLS\_RSA\_WITH\_RC4\_128\_SHA} and
+When the app chooses to use port 443 for any part of its communication, the
+connection is secured using TLSv1.2. The client offers 20 cipher suites, among
+which obsolete ciphers such as \texttt{TLS\_RSA\_WITH\_RC4\_128\_SHA} and
 \texttt{TLS\_RSA\_WITH\_AES\_128\_CBC\_SHA}, though this is probably dependent
 on the operating system. In our case, the server picked
-\texttt{TLS\_RSA\_WITH\_AES\_128\_GCM\_SHA256}, which is labeled by Mozilla as
-a ciphersuite of intermediate strength\cite{moz-tls}.
+\texttt{TLS\_RSA\_WITH\_AES\_128\_GCM\_SHA256}, which is labeled by Mozilla as a
+cipher suite of intermediate strength\cite{moz-tls}.
 
-When the app choses to use one of the two alternative TCP ports (5223 or 5228),
+When the app chooses to use one of the two alternative TCP ports (5223 or 5228),
 the connection is encoded using an unknown method. The data is binary and could
 be compressed, encrypted or both. When sending multiple kilobytes of repeating
 characters, the observed traffic is much smaller, leading us to believe the
@@ -257,12 +266,13 @@ contain any strings, such as the common name or issuer name from a certificate,
 which should have been visible for normal TLS or QUIC traffic.
 
 
-\section{Local Storage Analysis}
+\section{Local Storage Analysis}\label{sec:storage}
 
-We extracted the app's data folder from the Android device using TODO. Imo also
-stores data in \texttt{/sdcard/DCIM/imo} and \texttt{/sdcard/IMO}. In those
-folders, only videos and pictures are stored which are used in conversations or
-stories.
+After mounting the mobile device disk image, we found that most of the data used
+by imo is stored in the application's own data directory:
+\texttt{/sdcard/Android/data/com.imo.android.imoim}. Imo also stores some data
+in \texttt{/sdcard/DCIM/imo} and \texttt{/sdcard/IMO} however, only video and
+picture data used in conversations or stories are stored here.
 
 In the data directory, we can find all our messages and contacts in the sqlite3
 file \texttt{databases/imofriends.db}. For all contacts, both their name and a
@@ -292,15 +302,14 @@ file \texttt{files/brefs.json} contains a field named
 last opened.
 
 
-\subsection{Logged in user}
+\subsection{Logged-in User Data}
 
-When signing up or logging in, one needs to enter a confirmation code sent by
-SMS. The phone number entered is stored in
-\texttt{files/VerificationPrefs.json}, even when the number is not yet
-confirmed.
+When signing up or logging in, the phone number entered is stored in
+\texttt{files/VerificationPrefs.json}, even before the confirmation code sent
+through SMS is entered to confirm the number.
 
-After confirming the number, it is stored in \texttt{files/bprefs.json}. The
-JSON file contains a field named \texttt{GET\_MY\_PROFILE}, which is another
+After confirming the number, it is also stored in \texttt{files/bprefs.json}.
+The JSON file contains a field named \texttt{GET\_MY\_PROFILE}, which is another
 JSON string containing a field named \texttt{phone}.
 
 This file also contains the fields \texttt{SIGNUP\_DATE} and
@@ -309,7 +318,7 @@ phone number and the last time you logged in on this device with this number,
 respectively.
 
 
-\subsection{Removing data}
+\subsection{Removed Data}
 
 When you delete a message from a chat in imo, the application deletes it from
 the local database's `messages' table. Similarly, when you delete one of your
@@ -330,13 +339,20 @@ contains all previous calls made on this device. Other tables, such as
 `messages' and `friends', are cleared. Like with deleted messages, however, the
 original data can still be found in the binary data of the sqlite file.
 
+\section{Discussion}
 
-RANDOM NOTES
-============
+\section{Conclusions}
 
-- One can log in multiple times with the same account from multiple devices, concurrently
+\section{Future Work}
 
-- TODO: any sort of cache of Real-time-chat? People might chat through that and thereby never log any messages.
+
+% RANDOM NOTES
+% ============
+%
+% - One can log in multiple times with the same account from multiple devices, concurrently
+% - TODO: any sort of cache of Real-time-chat? People might chat through that
+%   and thereby never log any messages.
+
 
 % \section{Methods and Scope}
 %
