@@ -352,19 +352,15 @@ refers to it by its object id. These rows are not deleted upon deletion of the
 original story. When attempting to view the story in the application, it shows
 the story as deleted.
 
-When removing your account on imo, most of the local database tables are
+When removing one's account on imo, most of the local database tables are
 cleared. The `call\_timestamps' table is, however, not cleared and still
 contains all previous calls made on this device. Other tables, such as
 `messages' and `friends', are cleared. Like with deleted messages, however, the
 original data can still be found in the binary data of the sqlite file.
 
-\section{Results}\label{sec:results}
 
-\section{Discussion}\label{sec:disc}
 
-\section{Conclusions}\label{sec:conc}
 
-\section{Future Work}\label{sec:futwork}
 
 
 % RANDOM NOTES
@@ -392,39 +388,53 @@ original data can still be found in the binary data of the sqlite file.
 % disk image.
 
 
-\section{Discussion}
+\section{Discussion}\label{sec:disc}
 
-% r/therewasanattempt -- I'm not quite sure if this is a good way to write the discussion section, but I tried something at least :-)
+Gathering data from the local storage of the imo Android application in a
+forensic investigation proves very feasible, as imo does not encrypt or even
+obfuscate any of this data. Additionally, much ---if not all--- of the data is
+indeed stored locally. Imo did not opt to instead only store privacy sensitive
+data on a well protected server and wiping it from the mobile device's local
+storage.
 
-Imo could encrypt the local storage, or it could keep private data only on the
-server and delete it from the local device. Instead, it makes no attempt at
-either: all data is locally accessible without any obfuscation or encryption.
+Deletions of data are also not properly implemented. Upon deleting a message,
+the entry in the database is deleted but the binary data is still attainable
+until it is overwritten. This same issue applies when an entire account is
+deleted, data is still available in binary. In addition, at least one database
+table, the call history table, does not have its entries removed at all. We
+would expect an application that deals with private data, such as private chats,
+to re-create, if not securely wipe the entire database upon account deletion to
+prevent data leakage in this way.
 
-The databases are also not properly cleared upon deletion of the account: most
-tables are emptied, but the database is not recreated. This creates two
-problems: the application developers might forget to empty one of the tables
-(it appears the call history table has been forgotten) and it causes all data
-to be retained in the binary sqlite data file until overwritten. We would
-expect an application with private data (such as private chats) to completely
-re-create the database, or a truly privacy-conscious to securely wipe the
-database file before re-creation.
+However, the lack of data confidentiality is not wholly unexpected, as imo does
+not claim to be a privacy-focused application. Normally, other apps on the
+device should not be able to access imo's data directory, making data stored
+here reasonably secure. Still, simple measures could have been taken to harden
+the application against such situations where access to the device's local
+storage is attained by an untrusted party.
 
-This is not wholly unexpected: imo does not claim to be privacy-focused, and
-other apps should not be able to access the data folder, so it should be
-reasonably secure. Still, simple measures could have been taken to make it more
-secure.
+Additionally, the ease with which imo's local data was accessible makes it
+relatively simple for a user to alter (i.e. forge) their own data. One could
+make it appear as if someone else was logged into the device, or manually insert
+messages into the chat history.
 
-The accessibility of the data also makes it easy for users to alter their own
-data. One could make it appear as if someone else was logged into the device,
-or manually insert messages into the chat history.
+Some data that we deem to be relevant in a forensic investigation could,
+however, not be acquired. We were not able to retrieve unsent (i.e. draft)
+messages from the local storage or network analysis, so imo could be used to
+securely communicate through these drafts. We were also unable to find any
+location data in the locally stored data or through network analysis. It
+therefore remains unclear whether or not imo gathers this data at all, but the
+fact imo requests location permissions suggests that such data may indeed be
+gathered. The video and voice data going through imo also remained unattainable,
+as such data is not stored locally and the network traffic is not sent in
+plaintext.
 
-%TODO: finish the section
+
+\section{Conclusion}\label{sec:conc}
 
 
-\section{Conclusion}
 
-%TODO this
-
+\section{Future Work}\label{sec:futwork}
 
 \printbibliography
 
