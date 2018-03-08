@@ -45,20 +45,26 @@ os3-ccf@lucgommans.nl}
 \thispagestyle{plain}
 \pagestyle{plain}
 
+\begin{abstract}
+    This paper presents a forensic investigation of the imo.im Android
+    application. Imo is a messaging and voice and video calling application with
+    over half a billion installations worldwide. %Todo
+\end{abstract}
 
 \section{Introduction}
 
 In recent years, mobile communication tools have gained massively in popularity.
-Many mobile device users nowadays use internet based third party messaging
-applications over the small message service (SMS) provided by telecom companies.
-The advantage of these internet based alternatives is often the more extensive
-features an lower cost compared to SMS. It is therefore unsurprising that many
-such applications have over hundreds of millions of downloads, making the use of
-them widespread. This fact is important for forensics purposes because there are
-reasonable odds that a suspect has installed and possibly used at least one such
-application to send or receive sensitive data relevant to the case. The
-investigation into what data useful in a forensic investigation can be gathered
-from such applications, therefore becomes very relevant.
+Many mobile device users nowadays use internet based third party messaging and
+calling applications over the small message service (SMS) and regular phone
+calls provided by telecom companies.  The advantage of these internet based
+alternatives is often the more extensive features an lower cost compared to SMS.
+It is therefore unsurprising that many such applications have over hundreds of
+millions of downloads, making the use of them widespread. This fact is important
+for forensics purposes because there are reasonable odds that a suspect has
+installed and possibly used at least one such application to send or receive
+sensitive data relevant to the case. The investigation into what data useful in
+a forensic investigation can be gathered from such applications, therefore
+becomes very relevant.
 
 One example of such an application is {\it imo.im}, which currently has over
 half a billion installs on the Google Play Store. Fewer than ten messaging
@@ -73,8 +79,12 @@ instance validate or invalidate a suspect's alibi.
 The remainder of this paper is structured as follows: the next section briefly
 introduces the features of imo. Section \ref{sec:researchq} describes our main
 research question and the defined sub-questions. In Section \ref{sec:ethics} we
-discuss the ethical implications of our work. Section \ref{sec:relwork} gives
-an overview of the prior work done in this area of research. %TODO
+discuss the ethical implications of our work. Section \ref{sec:relwork} gives an
+overview of the prior work done in this area of research. In Section
+\ref{sec:method} we discuss our methods and experiment setup. Section
+\ref{sec:network} describes our findings from a network analysis while Section
+\ref{sec:storage} describes our analysis of the mobile device's local storage.
+%TODO
 
 % Or do we want to cite this instead?
 \footnotetext{Via Google Trends: \url{https://trends.google.com/trends/explore?q=imo}}
@@ -179,12 +189,6 @@ it is very feasible to acquire WhatsApp data from local storage, since data such
 as sent and received messages and contact information is stored unencrypted on
 the local storage.
 
-\subsection{Experimental Setup}\label{sec:setup}
-
-For our analysis of imo we used two android phones, a Sony Xperia Z (C6603) and
-an Alcatel Pixi 4, both of which run Android version 6.0.1. We used imo
-version TODO for our testing. %todo
-
 
 \section{Methods}\label{sec:method}
 
@@ -195,10 +199,15 @@ results of this are discussed in Section \ref{sec:network}.
 
 The investigation of the local storage is done by first imaging the entire local
 storage of the device and then mounting this image read only on our linux
-system. Analysis of the image was done manually, as our focus lies mostly with
-what data can be gathered and not with acquisition tools. The results of this
+system. Analysis of the image was done manually, the results of this
 investigation are discussed in Section \ref{sec:storage}.
 
+
+\subsection{Experimental Setup}
+
+For our analysis of imo we used two android phones, a Sony Xperia Z (C6603) and
+an Alcatel Pixi 4, both of which run Android version 6.0.1. We used imo
+version 9.8.000000009671 for our testing.
 
 \section{Network Communication Analysis}\label{sec:network}
 
@@ -339,11 +348,13 @@ contains all previous calls made on this device. Other tables, such as
 `messages' and `friends', are cleared. Like with deleted messages, however, the
 original data can still be found in the binary data of the sqlite file.
 
-\section{Discussion}
+\section{Results}\label{sec:results}
 
-\section{Conclusions}
+\section{Discussion}\label{sec:disc}
 
-\section{Future Work}
+\section{Conclusions}\label{sec:conc}
+
+\section{Future Work}\label{sec:futwork}
 
 
 % RANDOM NOTES
