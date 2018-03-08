@@ -61,20 +61,24 @@ alternatives is often the more extensive features an lower cost compared to SMS.
 It is therefore unsurprising that many such applications have over hundreds of
 millions of downloads, making the use of them widespread. This fact is important
 for forensics purposes because there are reasonable odds that a suspect has
-installed and possibly used at least one such application to send or receive
+installed and used at least one such application, possibly to send or receive
 sensitive data relevant to the case. The investigation into what data useful in
 a forensic investigation can be gathered from such applications, therefore
 becomes very relevant.
 
-One example of such an application is {\it imo.im}, which currently has over
-half a billion installs on the Google Play Store. Fewer than ten messaging
-applications have over half a billion installs as of October
-2017\cite{wiki-gplay-popular}. It appears most popular in southern Asia and the
-middle east, though there are users worldwide\footnotemark. This application
-requests permission to track the user's location, making it even more
-interesting for forensic purposes. If the application indeed tracks and stores
-a log of a user's location data, such data could be valuable in court to for
-instance validate or invalidate a suspect's alibi.
+One example of such an application is {\it imo.im} which exists for Android,
+iOS, Mac OS X and Windows \cite{imo}. It currently has over half a billion
+installs on Android through the Google Play Store, which fewer than ten
+messaging applications have achieved as of October 2017
+\cite{wiki-gplay-popular}. Making it a relatively widespread application on this
+platform. Imo appears to be most popular in southern Asia and the middle east,
+though there are users worldwide\footnotemark.
+
+In addition to its prevalence, Imo requests permission to track its users'
+location, making it even more interesting for forensic purposes. If the
+application indeed tracks and stores a log of a user's location data, such data
+could be valuable in court to for instance validate or invalidate a suspect's
+alibi.
 
 The remainder of this paper is structured as follows: the next section briefly
 introduces the features of imo. Section \ref{sec:researchq} describes our main
@@ -95,8 +99,8 @@ overview of the prior work done in this area of research. In Section
 
 As stated previously, imo is a messaging and voice and video calling application
 developed for Android, Mac OS X, iOS and Windows \cite{imo}. This description
-focusses on the Android version of imo, as the version for other platforms were
-not used for this paper.
+focusses on the Android version of imo, as the versions for other platforms are
+not investigated in this paper.
 
 Imo requires users to log in using their phone number, and each login is
 verified through an SMS code sent to that number. There is no difference between
@@ -142,7 +146,7 @@ This main research question divides in four sub-questions:
 \section{Ethical Considerations}\label{sec:ethics}
 
 For this paper we will use a test environment to examine the data that can be
-extracted from the imo android app. We will not be using any real user data and
+extracted from the imo Android app. We will not be using any real user data and
 use only designated test devices to make sure we do not invade or compromise the
 privacy of any real imo users.
 
@@ -191,7 +195,7 @@ the local storage.
 
 \subsection{Experimental Setup}\label{sec:setup}
 
-For our analysis of imo we used two android phones, a Sony Xperia Z (C6603) and
+For our analysis of imo we used two Android phones, a Sony Xperia Z (C6603) and
 an Alcatel Pixi 4, both of which run Android version 6.0.1. The imo application
 has versionCode 0x709 and the versionName is `9.8.000000009731', according to
 the \texttt{AndroidManifest.xml} file inside the apk. The SHA-256 hash value of
@@ -215,7 +219,7 @@ investigation are discussed in Section \ref{sec:storage}.
 
 \subsection{Experimental Setup}
 
-For our analysis of imo we used two android phones, a Sony Xperia Z (C6603) and
+For our analysis of imo we used two Android phones, a Sony Xperia Z (C6603) and
 an Alcatel Pixi 4, both of which run Android version 6.0.1. We used imo
 version 9.8.000000009671 for our testing.
 
@@ -359,35 +363,6 @@ contains all previous calls made on this device. Other tables, such as
 original data can still be found in the binary data of the sqlite file.
 
 
-
-
-
-
-% RANDOM NOTES
-% ============
-%
-% - One can log in multiple times with the same account from multiple devices, concurrently
-% - TODO: any sort of cache of Real-time-chat? People might chat through that
-%   and thereby never log any messages.
-
-
-% \section{Methods and Scope}
-%
-% We will do both static and dynamic analysis of the application. We limit
-% ourselves to the investigation of the imo Android application and do not look
-% into the iOS, MacOS or Windows versions. We will look at the stable release,
-% not any (potentially volatile) beta releases.
-%
-% The main point of interest is network traffic and stored data. If network data
-% is not (correctly) encrypted or otherwise revealing, this could be useful in an
-% active investigation. Stored data is useful for analysis after confiscating a
-% device.
-%
-% To access both the image and network traffic, we will run the application in an
-% Android emulator. This allows the host to capture traffic, as well as mount the
-% disk image.
-
-
 \section{Discussion}\label{sec:disc}
 
 Gathering data from the local storage of the imo Android application in a
@@ -439,4 +414,14 @@ plaintext.
 \printbibliography
 
 \end{document}
+
+
+% RANDOM NOTES
+% ============
+%
+% - One can log in multiple times with the same account from multiple devices, concurrently
+% - TODO: any sort of cache of Real-time-chat? People might chat through that
+%   and thereby never log any messages.
+% - Say something about the reasoning behind choosing to limit the
+%   investigation to the Android version? (prevalence on this platform)
 
