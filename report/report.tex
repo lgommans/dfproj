@@ -282,17 +282,30 @@ on the operating system. In our case, the server picked
 \texttt{TLS\_RSA\_WITH\_AES\_128\_GCM\_SHA256}, which is labeled by Mozilla as a
 cipher suite of intermediate strength\cite{moz-tls}.
 
-When the app chooses to use one of the two alternative TCP ports (5223 or 5228),
-the connection is encoded using an unknown method. The data is binary and could
-be compressed, encrypted or both. When sending multiple kilobytes of repeating
-characters, the observed traffic is much smaller, leading us to believe the
-data is compressed. It is unknown whether the traffic is also encrypted.
+When the app chooses to use one of the two alternative TCP ports (5223 or
+5228), the connection is encoded using an unknown method. The data is binary
+and could be compressed, encrypted or both. When sending multiple kilobytes of
+repeating characters, the observed traffic is much smaller, leading us to
+believe the data is compressed.
+
+The size of these packets is always divisible by 16 bytes and in the source
+code we find a static 128-bits AES key and references to AES-CBC with PKCS5
+padding. We also find code to decrypt data using an IV of all zeroes. When
+attempting to decrypt the traffic using this static key and the zeroed IV, or
+when we interpret the first 128 bits of a stream as the IV, we only find
+unrecognizable binary data. Whether the data is truly encrypted is unknown.
+Since compression will also result in high entropy estimations, we cannot use
+this method to determine whether it is encrypted.
 
 We have not been able to identify the protocol used for UDP traffic. For the
 traffic which is sent over port 443, we tried to decode it using Wireshark as
 DTLS and QUIC traffic, but neither was successful. The traffic also does not
 contain any strings, such as the common name or issuer name from a certificate,
-which should have been visible for normal TLS or QUIC traffic.
+which should have been visible for normal TLS or QUIC traffic. Packets over UDP
+are of irregular lengths, often as short as 10 bytes and often not divisible by
+even numbers. We find a few predictable bytes, such as an incremental number
+which could be used as a counter for encryption, but not enough to draw any
+conclusions about the encryption used (if any).
 
 
 \section{Local Storage Analysis}\label{sec:storage}
@@ -450,6 +463,8 @@ their contact's), but since one can log into the same account on multiple
 devices concurrently, one cannot discern which device sent a message.
 
 
+
+% todo udp data ^^^^^^
 \printbibliography
 
 \end{document}
