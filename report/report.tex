@@ -46,9 +46,17 @@ os3-ccf@lucgommans.nl}
 \pagestyle{plain}
 
 \begin{abstract}
-    This paper presents a forensic investigation of the imo.im Android
-    application. Imo is a messaging and voice and video calling application with
-    over half a billion installations worldwide. %Todo
+
+    This paper presents an investigation into what forensically interesting data
+    can be gathered from the imo on the Android platform. Imo is a messaging and
+    voice and video calling application with over half a billion installations
+    worldwide on the Android platform alone. This study investigates both what
+    data is available on the local storage of a mobile device on which imo is
+    used and what data can be gathered by capturing and examining network
+    traffic. We find that significant amounts of data can be retrieved from the
+    local storage, such as message and call data. The network traffic proved
+    better secured, as we were only able to retrieve sticker data from it.
+
 \end{abstract}
 
 \section{Introduction}
@@ -70,9 +78,13 @@ One example of such an application is {\it imo.im} which exists for Android,
 iOS, Mac OS X and Windows \cite{imo}. It currently has over half a billion
 installs on Android through the Google Play Store, which fewer than ten
 messaging applications have achieved as of October 2017
-\cite{wiki-gplay-popular}. Making it a relatively widespread application on this
-platform. Imo appears to be most popular in southern Asia and the middle east,
-though there are users worldwide\footnotemark.
+\cite{wiki-gplay-popular}. This makes it a relatively widespread application on
+the Android platform. Imo appears to be most popular in southern Asia and the
+middle east, though there are users worldwide\footnotemark. In this paper we
+limit ourselves to the Android version of imo due to both the prevalence of
+Android devices in general, and the prevalence of imo on this platform. We
+expect that the investigation of other platforms will yield similar results to
+the present investigation.
 
 In addition to its prevalence, Imo requests permission to track its users'
 location, making it even more interesting for forensic purposes. If the
@@ -140,8 +152,9 @@ This main research question divides in four sub-questions:
 
 \begin{enumerate}
     \item What data is identifiably sent over the network?
-    \item What message data is available locally?
-    \item What location data is available locally?
+    \item What data is available locally?
+    \item What location data is available locally or identifiably sent over the
+        network?
     \item Do any cached files or images exist locally?
 \end{enumerate}
 
@@ -225,6 +238,7 @@ investigation are discussed in Section \ref{sec:storage}.
 For our analysis of imo we used two Android phones, a Sony Xperia Z (C6603) and
 an Alcatel Pixi 4, both of which run Android version 6.0.1. We used imo
 version 9.8.000000009671 for our testing.
+
 
 \section{Network Communication Analysis}\label{sec:network}
 
@@ -426,17 +440,23 @@ reach. This might reveal which device is used, or where a user is located.
 
 \section{Conclusion}\label{sec:conc}
 
-% answer the question
+As shown in this paper, significant amounts of data can be gathered from the imo
+Android application, mostly from a mobile device's local storage. This data
+includes sent and received messages, images and video's used in chats, what
+calls were made and when, and what contacts are in this user's imo contact list.
+Only little significant data could be obtained from monitoring a device's
+network traffic as the data sent and received by imo is not in plaintext. The
+only data we could see travelling over the network data related to stickers that
+are used in chats. We were unable to find any identifiable location data stored
+or sent by imo, and it remains unclear what location data is collected by the
+imo application, if any.
 
 
 \section{Future Work}\label{sec:futwork}
 
-We have left platforms other than Android unexplored. We know the application
-is extremely heavily used on the Android platform and our expectation is that
-other platforms are similar, therefore we focused our efforts on the Android
-application only. Verifying the results on other platforms would be a useful
-addition.
-% TODO perhaps move part of this^ paragraph to the introduction
+In this paper we have left the investigation of imo on platforms other than
+Android unexplored. Even though imo is most heavily used on Android,
+investigating the imo versions for other platforms could still prove valuable.
 
 We were unable to find what protocol the app uses for its communication (only
 stickers were plain http) when it does not use TCP port 80 or 443. We expect
@@ -445,9 +465,11 @@ be only compressed or vulnerable to passive intercepts, depending on the
 protocol which is used.
 
 Finally, it might be possible to determine which device sent a certain message.
-Currently, a receipient can only see which phone number sent a message (i.e.
-their contact's), but since one can log into the same account on multiple
-devices concurrently, one cannot discern which device sent a message.
+Currently, we were only able to identify from which phone number or imo contact
+a message was received. However, since one can log into the same account (i.e.
+use the same phone number) on multiple devices concurrently, one cannot discern
+which device sent a message. We think investigation into identifying from which
+device a message was sent could prove valuable.
 
 
 \printbibliography
