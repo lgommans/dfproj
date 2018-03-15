@@ -95,12 +95,15 @@ alibi.
 The remainder of this paper is structured as follows: the next section briefly
 introduces the features of imo. Section \ref{sec:researchq} describes our main
 research question and the defined sub-questions. In Section \ref{sec:ethics} we
-discuss the ethical implications of our work. Section \ref{sec:relwork} gives an
-overview of the prior work done in this area of research. In Section
+discuss the ethical implications of our work. Section \ref{sec:relwork} gives
+an overview of the prior work done in this area of research. In Section
 \ref{sec:method} we discuss our methods and experiment setup. Section
-\ref{sec:network} describes our findings from a network analysis while Section
-\ref{sec:storage} describes our analysis of the mobile device's local storage.
-%TODO
+\ref{sec:network} describes our findings from the network analysis while
+Section \ref{sec:storage} describes our analysis of the mobile device's local
+storage. We discuss our results in Section \ref{sec:disc} and draw conclusions
+in Section \ref{sec:conc}. Finally, we present some directions for future work
+in Section \ref{sec:futwork}.
+
 
 % Or do we want to cite this instead?
 \footnotetext{Via Google Trends: \url{https://trends.google.com/trends/explore?q=imo}}
@@ -453,16 +456,15 @@ reach. This might reveal which device is used, or where a user is located.
 
 \section{Conclusion}\label{sec:conc}
 
-As shown in this paper, significant amounts of data can be gathered from the imo
-Android application, mostly from a mobile device's local storage. This data
-includes sent and received messages, images and video's used in chats, what
-calls were made and when, and what contacts are in this user's imo contact list.
-Only little significant data could be obtained from monitoring a device's
-network traffic as the data sent and received by imo is not in plaintext. The
-only data we could see travelling over the network data related to stickers that
-are used in chats. We were unable to find any identifiable location data stored
-or sent by imo, and it remains unclear what location data is collected by the
-imo application, if any.
+As shown in this paper, significant amounts of data can be gathered from the
+imo Android application, mostly from a mobile device's local storage. This data
+includes sent and received messages, images and video's used in chats, which
+calls were made and when, and what contacts are in this user's (imo) contact
+list. Monitoring a device's network traffic yielded few results of
+significance, as the data sent and received by imo is not in plaintext. The
+only plaintext data which travels over the network, is data related to
+stickers. We were unable to find any location data stored or sent by imo, and
+it remains unclear what location data is collected, if any.
 
 
 \section{Future Work}\label{sec:futwork}
@@ -475,18 +477,23 @@ We were unable to find what protocol the app uses for its communication (only
 stickers were plain http) when it does not use TCP port 80 or 443. We expect
 that the chat communication is encrypted, but the voice and video calls might
 be only compressed or vulnerable to passive intercepts, depending on the
-protocol which is used.
+protocol which is used. There are some predictable bytes and packets, such as
+an incrementing number in what we believe to be data packets. Another
+incrementing number is sent in separate, smaller packets which are sent roughly
+every two seconds. The other party echoes the number in this packet. Further
+investigation into the UDP traffic could give more insight into the data that
+is being sent.
 
-Finally, it might be possible to determine which device sent a certain message.
-Currently, we were only able to identify from which phone number or imo contact
-a message was received. However, since one can log into the same account (i.e.
-use the same phone number) on multiple devices concurrently, one cannot discern
-which device sent a message. We think investigation into identifying from which
-device a message was sent could prove valuable.
+Finally, it might be possible to more precisely indentify who sent a certain
+message, by identifying the device it was sent from. Currently, we were only
+able to identify from which phone number or imo contact a message was received.
+However, since one can log into the same account (i.e. use the same phone
+number) on multiple devices concurrently, one cannot discern between multiple
+devices using the same number. Identifying from which device a message was
+sent, possibly by looking at the IPs that are visible in the UDP traffic, would
+be valuable.
 
 
-
-% todo udp data ^^^^^^
 \printbibliography
 
 \end{document}
