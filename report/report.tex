@@ -80,11 +80,17 @@ installs on Android through the Google Play Store, which fewer than ten
 messaging applications have achieved as of October 2017
 \cite{wiki-gplay-popular}. This makes it a relatively widespread application on
 the Android platform. Imo appears to be most popular in southern Asia and the
-middle east, though there are users worldwide\footnotemark. In this paper we
+middle east, though there are users worldwide. In this paper we
 limit ourselves to the Android version of imo due to both the prevalence of
 Android devices in general, and the prevalence of imo on this platform. We
 expect that the investigation of other platforms will yield similar results to
 the present investigation.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{pop.png}
+	\caption{Popularity ranking (lower rank means more popular) of imo per region for the top 22 regions based on data from \texttt{similarweb.com}}
+	\label{fig:pop}
+\end{figure}
 
 In addition to its prevalence, Imo requests permission to track its users'
 location, making it even more interesting for forensic purposes. If the
@@ -103,11 +109,6 @@ Section \ref{sec:storage} describes our analysis of the mobile device's local
 storage. We discuss our results in Section \ref{sec:disc} and draw conclusions
 in Section \ref{sec:conc}. Finally, we present some directions for future work
 in Section \ref{sec:futwork}.
-
-
-% Or do we want to cite this instead?
-\footnotetext{Via Google Trends: \url{https://trends.google.com/trends/explore?q=imo}}
-%TODO this is heavily influenced by the acronym imo, meaning in my opinion.
 
 
 \section{Overview of Imo}
@@ -212,15 +213,6 @@ it is very feasible to acquire WhatsApp data from local storage, since data such
 as sent and received messages and contact information is stored unencrypted on
 the local storage.
 
-\subsection{Experimental Setup}\label{sec:setup}
-
-For our analysis of imo we used two Android phones, a Sony Xperia Z (C6603) and
-an Alcatel Pixi 4, both of which run Android version 6.0.1. The imo application
-has versionCode 0x709 and the versionName is `9.8.000000009731', according to
-the \texttt{AndroidManifest.xml} file inside the apk. The SHA-256 hash value of
-the apk file is \texttt{61972382 e73a4614 0cae38a0 3eae8b63 9f6e42aa 9d47368d
-f207a08b a6f097ae}.
-
 
 \section{Methods}\label{sec:method}
 
@@ -230,17 +222,21 @@ locally on the phone, writing the data in pcap format to a file. We then downloa
 the data from the phone and inspect it using wireshark afterwards. The
 results of this are discussed in Section \ref{sec:network}.
 
-The investigation of the local storage is done by first imaging the entire local
-storage of the device and then mounting this image read only on our linux
-system. Analysis of the image was done manually, the results of this
-investigation are discussed in Section \ref{sec:storage}.
+The investigation of the local storage is done by first imaging the local data
+partition of the device using \textit{dd} from the adb shell. We then mount
+this image read only on our linux system. Analysis of the image was done
+manually, the results of this investigation are discussed in Section
+\ref{sec:storage}.
 
 
-\subsection{Experimental Setup}
+\subsection{Experimental Setup}\label{sec:setup}
 
 For our analysis of imo we used two Android phones, a Sony Xperia Z (C6603) and
-an Alcatel Pixi 4, both of which run Android version 6.0.1. We used imo
-version 9.8.000000009671 for our testing.
+an Alcatel Pixi 4, both of which run Android version 6.0.1. The imo application
+has versionCode 0x709 and the versionName is `9.8.000000009731', according to
+the \texttt{AndroidManifest.xml} file inside the apk. The SHA-256 hash value of
+the apk file is \texttt{61972382 e73a4614 0cae38a0 3eae8b63 9f6e42aa 9d47368d
+f207a08b a6f097ae}.
 
 
 \section{Network Communication Analysis}\label{sec:network}
