@@ -49,5 +49,5 @@ commit:
 	git push
 
 hub:
-	sensible-browser "https://github.com/`grep '.git$$' ../.git/config | awk -F: '{print $$2}' | awk -F. '{print $$1}'`"
+	xdg-open "https://github.com/`grep 'git@github.com' ../.git/config | awk -F: '{print $$2}' | awk -F. '{print $$1}'`"
 
