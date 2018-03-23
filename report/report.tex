@@ -65,18 +65,18 @@ os3-ccf@lucgommans.nl}
 
 \section{Introduction}
 
-In recent years, mobile communication tools have gained massively in popularity.
-Many mobile device users nowadays use internet-based third party messaging and
-calling applications over the short message service (SMS) and regular phone
-calls provided by telecommunication companies.  The advantage of these internet-based
-alternatives is often the more extensive features and lower cost compared to SMS.
-It is therefore unsurprising that many such applications have over hundreds of
-millions of downloads, making the use of them widespread. This fact is important
-for forensics purposes because there are reasonable odds that a suspect has
-installed and used at least one such application, possibly to send or receive
-sensitive data relevant to the case. The investigation into what data useful in
-a forensic investigation can be gathered from such applications, therefore
-becomes very relevant.
+In recent years, mobile communication tools have gained massively in
+popularity. Many mobile device users nowadays use internet-based third party
+messaging and calling applications over the short message service (SMS) and
+regular phone calls provided by telecommunication companies.  The advantage of
+these internet-based alternatives is often the more extensive features and
+lower cost compared to SMS. It is therefore unsurprising that many such
+applications have over hundreds of millions of downloads, making the use of
+them widespread. This fact is important for forensics purposes because there
+are reasonable odds that a suspect has installed and used at least one such
+application, possibly to send or receive sensitive data relevant to the case.
+The investigation into what data useful in a forensic investigation can be
+gathered from such applications, therefore becomes very relevant.
 
 One example of such an application is {\it imo.im}, which exists for Android,
 iOS, Mac OS X and Windows \cite{imo}. It currently has over half a billion
@@ -84,11 +84,11 @@ installs on Android through the Google Play Store, which fewer than ten
 messaging applications have achieved as of October 2017
 \cite{wiki-gplay-popular}. This makes it a relatively widespread application on
 the Android platform. Imo appears to be most popular in southern Asia and the
-middle east, though there are users worldwide. In this paper we
-limit ourselves to the Android version of imo due to both the prevalence of
-Android devices in general, and the prevalence of imo on this platform. We
-expect that the investigation of other platforms will yield similar results to
-the present investigation.
+middle east, though there are users worldwide. In this paper we limit ourselves
+to the Android version of imo due to both the prevalence of Android devices in
+general, and the prevalence of imo on this platform. We expect that the
+investigation of other platforms will yield similar results to the present
+investigation.
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{pop.png}
@@ -117,17 +117,18 @@ in Section \ref{sec:futwork}.
 
 \section{Overview of imo}
 
-As stated previously, imo is a messaging and voice and video calling application
-developed for Android, Mac OS X, iOS and Windows \cite{imo}. This description
-focuses on the Android version of imo, as the versions for other platforms are
-not investigated in this paper.
+As stated previously, imo is a messaging and voice and video calling
+application developed for Android, Mac OS X, iOS and Windows \cite{imo}. This
+description focuses on the Android version of imo, as the versions for other
+platforms are not investigated in this paper.
 
 Imo requires users to log in using their phone number, and each login is
-verified through an SMS code sent to that number. There is no difference between
-logging into an existing account (i.e. phone number known and previously used for
-imo) and creating a new account (i.e. phone number not previously used for imo),
-as imo uses the same procedure for both. There are no other types of logins
-possible, e.g. there is no option to register using a username and password.
+verified through an SMS code sent to that number. There is no difference
+between logging into an existing account (i.e. phone number known and
+previously used for imo) and creating a new account (i.e. phone number not
+previously used for imo), as imo uses the same procedure for both. There are no
+other types of logins possible, e.g. there is no option to register using a
+username and password.
 
 Note that multiple devices can use a single number at the same time. The app
 does not show this to the user and crashes regularly in this set-up.
@@ -180,53 +181,53 @@ privacy of any real imo users.
 \section{Related Work}\label{sec:relwork}
 
 No prior work has been done on the imo messaging app for any platform, the only
-mention of imo in academic literature is in the paper by \citeauthor{zhu}, which
-does a more general review of several group messaging applications and does not
-conduct an analysis of what data can be acquired for use in a criminal
+mention of imo in academic literature is in the paper by \citeauthor{zhu},
+which does a more general review of several group messaging applications and
+does not conduct an analysis of what data can be acquired for use in a criminal
 investigation \cite{zhu}.
 
-Fortunately, academic research does exist on the forensic investigation of other
-messaging applications. \citeauthor{mahajan2013forensic} conduct a forensic
-analysis of the Android messaging applications Viber and WhatsApp
+Fortunately, academic research does exist on the forensic investigation of
+other messaging applications. \citeauthor{mahajan2013forensic} conduct a
+forensic analysis of the Android messaging applications Viber and WhatsApp
 \cite{mahajan2013forensic}. The aim of their paper is to find whether the data
-of those applications, such as sent and received messages and images, are stored
-locally in a way that they can be extracted from the device.
+of those applications, such as sent and received messages and images, are
+stored locally in a way that they can be extracted from the device.
 \citeauthor{mahajan2013forensic} managed to find and extract several artifacts
 relevant to a forensic investigation, such as sent and received messages and
 contact phone numbers.
 
 \citeauthor{walnycky2015network} conduct an extensive investigation of 20
 popular Android messaging applications \cite{walnycky2015network}. In their
-paper they investigate what data is can be retrieved by investigating the mobile
-device's local storage, the applications' server storage and network traffic
-analysis in a forensic investigation for each application. For the purpose of
-cross-referencing the results, network traffic is analysed using three different
-tools: Wireshark, NetworkMiner and NetWitness Investigator. Server-stored
-data was investigated by recovering links to the applications' servers from the
-network traffic analysis. Locally stored data was acquired and investigated
-using Micro-systemation's {\it XRY} and verified by also using {\it Helium
-backup} in combination with {\it Android backup extractor} and an SQLite
-database browser.  In their paper, \citeauthor{walnycky2015network} state that 4
-of the applications leaked no data when subjected to their investigative
-methods.  However, their study did find that 16 applications do leak data either
-through network communication or local/server storage.
+paper they investigate what data is can be retrieved by investigating the
+mobile device's local storage, the applications' server storage and network
+traffic analysis in a forensic investigation for each application. For the
+purpose of cross-referencing the results, network traffic is analysed using
+three different tools: Wireshark, NetworkMiner and NetWitness Investigator.
+Server-stored data was investigated by recovering links to the applications'
+servers from the network traffic analysis. Locally stored data was acquired and
+investigated using Micro-systemation's {\it XRY} and verified by also using
+{\it Helium backup} in combination with {\it Android backup extractor} and an
+SQLite database browser.  In their paper, \citeauthor{walnycky2015network}
+state that 4 of the applications leaked no data when subjected to their
+investigative methods.  However, their study did find that 16 applications do
+leak data either through network communication or local/server storage.
 
 A forensic investigation of WhatsApp is also conducted by
 \citeauthor{anglano2014forensic} \cite{anglano2014forensic}, who uses a virtual
 Android environment created with {\it YouWave} to investigate what data can be
 acquired from WhatsApp through a device's local storage. Their study shows that
-it is very feasible to acquire WhatsApp data from local storage, since data such
-as sent and received messages and contact information is stored unencrypted on
-the local storage.
+it is very feasible to acquire WhatsApp data from local storage, since data
+such as sent and received messages and contact information is stored
+unencrypted on the local storage.
 
 
 \section{Methods}\label{sec:method}
 
 To investigate what forensically interesting data can be obtained through imo,
-we first focus on analysing network traffic. For this analysis, we run a tcpdump
-locally on the phone, writing the data in pcap format to a file. We then download
-the data from the phone and inspect it using Wireshark afterwards. The
-results of this are discussed in Section \ref{sec:network}.
+we first focus on analysing network traffic. For this analysis, we run a
+tcpdump locally on the phone, writing the data in pcap format to a file. We
+then download the data from the phone and inspect it using Wireshark
+afterwards. The results of this are discussed in Section \ref{sec:network}.
 
 The investigation of the local storage is done by first imaging the local data
 partition of the device using \textit{dd} from the ADB shell. We then mount
@@ -249,14 +250,15 @@ f207a08b a6f097ae}.
 
 Upon analysing the pcap file in Wireshark, we found that the regular network
 communication (e.g. chats) use TCP ports 443, 5223 and 5228. We have not been
-able to identify why the app sometimes uses one port over the other. In the APK,
-we find references to those three ports together, so we are confident that there
-are no other TCP ports in use.  Searching online for those ports, we find that
-these ports overlap with WhatsApp, C2DM (now-defunct server-push platform
+able to identify why the app sometimes uses one port over the other. In the
+APK, we find references to those three ports together, so we are confident that
+there are no other TCP ports in use.  Searching online for those ports, we find
+that these ports overlap with WhatsApp, C2DM (now-defunct server-push platform
 provided by Google, using port 5228) and Apple's push implementation (APNS,
 using port 5223). Most likely, imo uses those ports because they are commonly
-used by mobile devices for core operating system features (server push) or other
-popular applications. Network administrators are unlikely to block those ports.
+used by mobile devices for core operating system features (server push) or
+other popular applications. Network administrators are unlikely to block those
+ports.
 
 The downloading of stickers is done over plain HTTP. Anyone observing the
 network traffic can therefore see which emoticons are used by a device. It is
@@ -290,17 +292,18 @@ and the internet connection is turned off.
 
 Any stickers used in chats are downloaded over TCP port 80, using HTTP/1.1. A
 sticker is a ZIP archive with images in PNG format, one per frame of the
-animation. The filenames are sequential numbers: \texttt{1.png}, \texttt{2.png},
-etc. When the user is picking a sticker, the previews are downloaded as a single
-image over HTTP (rather than the full animation in a ZIP archive).
+animation. The filenames are sequential numbers: \texttt{1.png},
+\texttt{2.png}, etc. When the user is picking a sticker, the previews are
+downloaded as a single image over HTTP (rather than the full animation in a ZIP
+archive).
 
 When the app chooses to use port 443 for any part of its communication, the
 connection is secured using TLSv1.2. The client offers 20 cipher suites, among
 which obsolete ciphers such as \texttt{TLS\_RSA\_WITH\_RC4\_128\_SHA} and
 \texttt{TLS\_RSA\_WITH\_AES\_128\_CBC\_SHA}, though this is probably dependent
 on the operating system. In our case, the server picked
-\texttt{TLS\_RSA\_WITH\_AES\_128\_GCM\_SHA256}, which is labelled by Mozilla as a
-cipher suite of intermediate strength\cite{moz-tls}.
+\texttt{TLS\_RSA\_WITH\_AES\_128\_GCM\_SHA256}, which is labelled by Mozilla as
+a cipher suite of intermediate strength\cite{moz-tls}.
 
 When the app chooses to use one of the two alternative TCP ports (5223 or
 5228), the connection is encoded using an unknown method. The data is binary
@@ -332,8 +335,8 @@ conclusions about the encryption used (if any).
 
 \section{Local Storage Analysis}\label{sec:storage}
 
-After mounting the mobile device disk image, we found that most of the data used
-by imo is stored in the application's own data directory:
+After mounting the mobile device disk image, we found that most of the data
+used by imo is stored in the application's own data directory:
 \texttt{/sdcard/Android/data/com.imo.android.imoim}. Imo also stores some data
 in \texttt{/sdcard/DCIM/imo} and \texttt{/sdcard/IMO} however, only video and
 picture data used in conversations or stories are stored here.
@@ -376,27 +379,27 @@ When signing up or logging in, the phone number entered is stored in
 through SMS is entered to confirm the number.
 
 After confirming the number, it is also stored in \texttt{files/bprefs.json}.
-The JSON file contains a field named \texttt{GET\_MY\_PROFILE}, which is another
-JSON string containing a field named \texttt{phone}. This file also contains
-the fields \texttt{SIGNUP\_DATE} and \texttt{SIGNUP\_TIME}, which contain the
-first time someone logged in with this phone number and the last time you
-logged in on this device with this number, respectively.
+The JSON file contains a field named \texttt{GET\_MY\_PROFILE}, which is
+another JSON string containing a field named \texttt{phone}. This file also
+contains the fields \texttt{SIGNUP\_DATE} and \texttt{SIGNUP\_TIME}, which
+contain the first time someone logged in with this phone number and the last
+time you logged in on this device with this number, respectively.
 
 
 \subsection{Removed Data}
 
 When you delete a message from a chat in imo, the application deletes it from
 the local database's `messages' table. Similarly, when you delete one of your
-stories, it is deleted from the `stories' table. However, in the binary
-data, we can still find the original message. By parsing the SQLite format, one
-might be able to find other fields belonging to the message such as the
-corresponding timestamp.
+stories, it is deleted from the `stories' table. However, in the binary data,
+we can still find the original message. By parsing the SQLite format, one might
+be able to find other fields belonging to the message such as the corresponding
+timestamp.
 
 When removing a story, references to the story are not deleted. For example
 when one replies to a story, an entry is created in the `messages' table which
-refers to it by its object identifier. These rows are not deleted upon deletion of the
-original story. When attempting to view the story in the application via this reference, it shows
-the story as having been deleted.
+refers to it by its object identifier. These rows are not deleted upon deletion
+of the original story. When attempting to view the story in the application via
+this reference, it shows the story as having been deleted.
 
 When removing one's account on imo, most of the local database tables are
 cleared. The `call\_timestamps' table is, however, not cleared and still
@@ -414,8 +417,8 @@ indeed stored locally. Imo did not opt to instead only store privacy-sensitive
 data on a well-protected server and wiping it from the mobile device's local
 storage.
 
-Deletion of data is also not properly implemented. Upon deleting a message,
-the entry in the database is deleted but it is still present in the binary data
+Deletion of data is also not properly implemented. Upon deleting a message, the
+entry in the database is deleted but it is still present in the binary data
 until it is overwritten. This same issue applies when an entire account is
 deleted: data is still available in the binary. In addition, at least one
 database table, the call history table, does not have its entries removed at
@@ -432,8 +435,8 @@ storage is attained by an untrusted party.
 
 Additionally, the ease with which imo's local data was accessible makes it
 relatively simple for a user to alter (i.e. forge) their own data. One could
-make it appear as if someone else was logged into the device, or manually insert
-messages into the chat history.
+make it appear as if someone else was logged into the device, or manually
+insert messages into the chat history.
 
 Some data that we deem to be relevant in a forensic investigation could,
 however, not be acquired. We were not able to retrieve unsent messages from the
@@ -491,11 +494,11 @@ is being sent.
 Finally, it might be possible to more precisely identify who sent a certain
 message, by identifying the device it was sent from. Currently, we were only
 able to identify from which phone number or imo contact a message was received.
-Since one can log into the same account (i.e. use the same phone
-number) on multiple devices concurrently, one cannot discern between multiple
-devices using the same number. Identifying from which device a message was
-sent, possibly by looking at the IP addresses that are visible in the UDP traffic, would
-be valuable.
+Since one can log into the same account (i.e. use the same phone number) on
+multiple devices concurrently, one cannot discern between multiple devices
+using the same number. Identifying from which device a message was sent,
+possibly by looking at the IP addresses that are visible in the UDP traffic,
+would be valuable.
 
 
 \printbibliography
