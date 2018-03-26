@@ -333,6 +333,22 @@ which could be used as a counter for encryption, but not enough to draw any
 conclusions about the encryption used (if any).
 
 
+\subsection{Recognisability}
+
+On TCP port 443, where TLSv1.2 is used, a certificate with `commonName'
+\texttt{*.imo.im} is used, issued by Thawte. The organisation name is
+`PageBites Inc.'. The certificate is valid for a period of about 20 days.
+
+When the application uses TCP ports 5223 or 5228, the data appears completely
+random. We could not identify a recognizable sequence. One might guess that
+this is imo traffic by ruling out other applications which use this port, or by
+observing the traffic switching between those three ports. Once it decides to
+connect over TCP port 443, it can be recognized as described before.
+
+In the UDP traffic we did observe some patterns, but we did not see a clear
+marker which could readily be used for identification.
+
+
 \section{Local Storage Analysis}\label{sec:storage}
 
 After mounting the mobile device disk image, we found that most of the data
@@ -359,9 +375,10 @@ the `messages' table, as a chat message to the respective user.
 
 The table `friends' contains your contacts. These are all the people you can
 message and call. In contrast, the tables `imo\_phonebook', `phone\_numbers',
-and `phonebook\_entries' contain the contacts of whom you have a number; these
-contacts are the ones also in your Android contact list. It appears that you
-are only able to see stories of the users of whom you have the number.
+and `phonebook\_entries' contain all contacts of whom you have a number; these
+contacts are the ones also in your Android contact list. If the contact is not
+on imo, they will not appear in `phone\_numbers'. It appears that you are only
+able to see stories of the users of whom you have the number.
 
 Outside of this database, other files also contain usage information. The JSON
 file \texttt{files/brefs.json} contains a field named
@@ -407,6 +424,10 @@ contains all previous calls made on this device. Other tables, such as
 `messages' and `friends', are cleared. Like with deleted messages, however, the
 original data can still be found in the binary data of the SQLite file.
 
+Finally, when we remove a contact from the Android contact list, this number is
+preserved in the `phonebook\_entries' and `imo\_phonebook' tables of
+\texttt{imofriends.db}.
+
 
 \section{Discussion}\label{sec:disc}
 
@@ -417,14 +438,16 @@ indeed stored locally. Imo did not opt to instead only store privacy-sensitive
 data on a well-protected server and wiping it from the mobile device's local
 storage.
 
-Deletion of data is also not properly implemented. Upon deleting a message, the
-entry in the database is deleted but it is still present in the binary data
-until it is overwritten. This same issue applies when an entire account is
-deleted: data is still available in the binary. In addition, at least one
-database table, the call history table, does not have its entries removed at
-all. We would expect an application that deals with private data, such as
-private chats, to re-create, if not securely wipe the entire database upon
-account deletion to prevent data leakage in this way.
+Deletion of data is also not properly implemented. Upon deleting a contact from
+your Android contact list, a copy of the name and number will remain in two
+places in the local imo database. Upon deleting a message, the entry in the
+database is deleted but it is still present in the binary data until it is
+overwritten. This same issue applies when an entire account is deleted: data is
+still available in the binary. In addition, at least one database table, the
+call history table, does not have its entries removed at all. We would expect
+an application that deals with private data, such as private chats, to
+re-create, if not securely wipe the entire database upon account deletion to
+prevent data leakage in this way.
 
 However, the lack of data confidentiality is not wholly unexpected, as imo does
 not claim to be a privacy-focused application. Normally, other apps on the
@@ -488,8 +511,8 @@ intercepts. There are some predictable bytes and packets, such as an
 incrementing number in what we believe to be data packets. Another incrementing
 number is sent in separate, smaller packets which are sent roughly every two
 seconds. The other party echoes the number in this packet. Further
-investigation into the UDP traffic could give more insight into the data that
-is being sent.
+investigation into the UDP traffic could both give more insight into what data
+is being sent as well as helping recognize imo in intercepted traffic.
 
 Finally, it might be possible to more precisely identify who sent a certain
 message, by identifying the device it was sent from. Currently, we were only
